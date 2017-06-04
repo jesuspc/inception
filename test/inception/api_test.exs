@@ -40,7 +40,6 @@ defmodule Inception.ApiTest do
 
   test "it defines a schema" do
     %Def{} = get_schema
-    assert true
   end
 
   test "it defines endpoints inside the schema" do
@@ -50,7 +49,6 @@ defmodule Inception.ApiTest do
         %Endpoint{path: "/accounts", verb: :get}
       ]
     } = get_schema
-    assert true
   end
 
   test "it defines query params" do

@@ -2,7 +2,6 @@ defmodule Inception.Api do
   alias Inception.Api.Definition, as: Def
   alias Def.Endpoint, as: Endpoint
   alias Endpoint.QueryParam, as: QueryParam
-  import Lens
   import Focus
 
   defmacro __using__(_opts) do
@@ -27,17 +26,17 @@ defmodule Inception.Api do
     end
   end
 
-  defmacro get(p, do: block) do
+  defmacro action(p, verb, do: block) do
     quote do
       @previous_current_path @current_path
       @current_path @current_path <> "/" <> unquote(p)
-      get(do: block)
+      action(unquote(verb), do: block)
       @current_path @previous_current_path
     end
   end
-  defmacro get(do: block) do
+  defmacro action(verb, do: block) do
     quote do
-      endpoint = Endpoint.new(path: @current_path, verb: :get)
+      endpoint = Endpoint.new(path: @current_path, verb: unquote(verb))
       new_def = Focus.over(
         Def.endpoints_lens, @api_definition, &(&1 ++ [endpoint])
       )
@@ -45,6 +44,17 @@ defmodule Inception.Api do
       @endpoint_idx length(new_def.endpoints) - 1
       unquote(block)
       @endpoint_idx nil
+    end
+  end
+
+  defmacro get(p, do: block) do
+    quote do
+      action(unquote(p), :get, do: unquote(block))
+    end
+  end
+  defmacro get(do: block) do
+    quote do
+      action(:get, do: unquote(block))
     end
   end
 
