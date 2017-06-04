@@ -5,47 +5,6 @@ defmodule Inception.ApiTest do
   alias Def.Endpoint.QueryParam, as: QueryParam
   alias Def.Endpoint.Format, as: Format
 
-  defmodule MyApi do
-    use Inception.Api
-
-    api_definition do
-      path "users" do
-        get do
-          query_param "sort_by", :string
-        end
-        post do
-          consumes [:json]
-          produces [:csv]
-            # body do
-            #   schema User
-            # end
-            # response 200
-            # response 400
-        end
-        put do
-
-        end
-        delete do
-
-        end
-        head do
-
-        end
-        patch do
-
-        end
-      end
-      path "accounts" do
-        get do
-        end
-      end
-    end
-
-    def get_schema do
-      @api_definition
-    end
-  end
-
   def get_schema do
     MyApi.get_schema
   end
@@ -71,7 +30,7 @@ defmodule Inception.ApiTest do
   test "it defines query params" do
     [users_endpoint | _] = get_schema.endpoints
     assert users_endpoint.query_params == [
-      %QueryParam{key: "sort_by", type: :string}
+      %QueryParam{key: "sort_by", type: :string, kind: :optional}
     ]
   end
 

@@ -4,7 +4,8 @@ defmodule Inception.Api.Definition.Endpoint do
     verb: :get,
     query_params: [],
     input_formats: [],
-    output_formats: []
+    output_formats: [],
+    body: %{}
 
   def new(path: path, verb: verb) do
     %__MODULE__{path: path, verb: verb}

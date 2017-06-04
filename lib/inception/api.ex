@@ -114,9 +114,11 @@ defmodule Inception.Api do
     end
   end
 
-  defmacro query_param(key, type) do
+  defmacro query_param(key, type, kind) do
     quote do
-      query_param = QueryParam.new(key: unquote(key), type: unquote(type))
+      query_param = QueryParam.new(
+        key: unquote(key), type: unquote(type), kind: unquote(kind)
+      )
       lens = Def.endpoints_lens
         ~> Lens.idx(@endpoint_idx)
         ~> Endpoint.query_params_lens
@@ -141,6 +143,24 @@ defmodule Inception.Api do
       ~> Lens.idx(@endpoint_idx)
       ~> Endpoint.output_formats_lens
       @api_definition Focus.over(lens, @api_definition, &(&1 ++ new_formats))
+    end
+  end
+
+  defmacro body(do: block) do
+    quote do
+      lens = Def.endpoints_lens
+      ~> Lens.idx(@endpoint_idx)
+      ~> Endpoint.body_lens
+      @body %{}
+      unquote(block)
+      @api_definition Focus.set(lens, @api_definition, @body)
+      @body %{}
+    end
+  end
+
+  defmacro schema(do: block) do
+    quote do
+
     end
   end
 end

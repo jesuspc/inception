@@ -27,6 +27,7 @@ defmodule Inception.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:focus, "~> 0.2.4"}]
+    [{:focus, "~> 0.2.4"},
+     {:plug, "~> 1.0", only: :test}]
   end
 end
